@@ -1,0 +1,15 @@
+<%- include('partial/header'); -%>
+
+<div class="login">
+    <h2>Create an account</h2>
+    <form action="" method="post" id="EmailLogin">
+        <input type="email" placeholder="Email" id="Username" autocomplete="on" name="username">
+        <input type="password" id="password" placeholder="Password" autocomplete="on" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{9,}" title="Password must contain a Uppercase, Lowercase, character and must be more than 9 length">
+        <input type="password" id="ConfirmPassword" placeholder="Confirm Password" autocomplete="on" name="ConfirmPassword">
+        <button type="submit" id="btn">Sign Up</button>
+        <span id="txt"></span>
+        <a href="/login">Already have an account? Login</a>
+    </form>
+</div>
+
+<%- include('partial/footer'); -%>

@@ -1,0 +1,95 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+body{
+    background-color: rgb(51, 2, 47);
+    color: #eafbfb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+}
+button{
+    background-color: rgba(8, 8, 143, 0.642);
+    color: #eafbfb;
+    font-weight: 400;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.icon{
+    background-color: rgba(4, 59, 74, 0.742);
+    display: inline-flex;
+    padding: 10px;
+    color: #eafbfb;
+}
+.login-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* email page  */
+.login{
+    box-shadow: 0 0 .7em #eafbfb;
+    padding: 2em 20px ;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+.login a{
+    color: #eafbfb;
+    font-size: 11px;
+    font-weight: 200;
+    text-decoration: none;
+    font-family: monospace;
+}
+.login a:hover{
+    text-decoration: underline;
+}
+input{
+    color: #eafbfb;
+    background-color: transparent;
+    outline: none;
+    font-weight: 300;
+    padding: 5px 10px;
+    border: 1px solid #eafbfb;
+    line-height: 2;
+    width: 100%;
+    font-size: 16px;
+}
+button[type="submit"]{
+    background-color: blue;
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 13px 0;
+    font-size: 16px;
+}
+button[type="submit"]:focus{
+    background-color: rgb(39, 39, 250);
+}
+h2{
+    text-align: center;
+    font-size: 1.3em;
+    margin-bottom: 1.3em;
+    font-family: monospace;
+}
+#txt{
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin: 10px 0;
+    font-family: monospace;
+    transition: 1s;
+}
