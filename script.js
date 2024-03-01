@@ -8,6 +8,7 @@ const LocalStrategy = require("passport-local");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
 const nodEmailer = require("nodemailer");
+const GoogleStrategy = require("passport-google-oauth2")
 require("dotenv").config();
 const currentDate = new Date()
 const saltRound = 10;
@@ -105,10 +106,9 @@ app.post("/login",passport.authenticate("local",{
 }));
 
 //Handling the root route of the website 
-
-
-
-
+app.get('/auth/google', passport.authenticate("goole",{
+    scope : [ "profile", "email"]
+}))
 app.get("/", (req, res)=>{
     res.render("index");
 });
@@ -128,50 +128,74 @@ app.get("/secret",(req, res)=>{
 })
 
 passport.use( new LocalStrategy(async(username, password, cb)=>{
+    // using try and catch method for any error 
 
-         // checking if the user already exit 
+    try {
+                 // checking if the user already exit 
     const userChecked =await db.query( 
          "SELECT * FROM usersdata WHERE username = $1",
         [username]
         );
+        
      // checking if user exit the we send them the secret page 
     if(userChecked.rows.length > 0){
-        const passwordChecker = userChecked.rows[0].password;
+        const userID = userChecked.rows[0];
+        const passwordChecker = userID.password;
         bcrypt.compare(password, passwordChecker, (err, result)=>{
-            if(result){
-                 // setting a email transporter 
-                const transporter = nodEmailer.createTransport({
-                    service: "gmail",
-                    host: "smtp.gmail.com",
-                    port: 587,
-                    secure: false,
-                    auth: {
-                        user: process.env.API_GMAIL,
-                        pass: process.env.API_PASSWORD,
-                    }
-                    });
-                    const mailOptions = {
-                    from: {
-                        name: "TechGenius",
-                        address: process.env.API_GMAIL,
-                    },
-                    to: username,
-                    subject: "You've Just Login",
-                    html: `<h3>Detect New Login</h3>
-                    <p>If you didn't perform this login</p>
-                    <p>please report this to the web developer: ${process.env.API_GMAIL}</p>
-                    <p> ${currentDate.toDateString()}</P>
-                    `
-                    }
-                    transporter.sendMail(mailOptions, (err, info)=>{
-                        if(err) throw err;
-                    });
+            if(err){
+                return cd(err)
             }else{
-                return cb("User does not Exist!")
+                if(result){
+                    return cb(null, userID)
+                    // setting a email transporter 
+                    const transporter = nodEmailer.createTransport({
+                        service: "gmail",
+                        host: "smtp.gmail.com",
+                        port: 587,
+                        secure: false,
+                        auth: {
+                            user: process.env.API_GMAIL,
+                            pass: process.env.API_PASSWORD,
+                        }
+                        });
+                        const mailOptions = {
+                        from: {
+                            name: "TechGenius",
+                            address: process.env.API_GMAIL,
+                        },
+                        to: username,
+                        subject: "You've Just Login",
+                        html: `<h3>Detect New Login</h3>
+                        <p>If you didn't perform this login</p>
+                        <p>please report this to the web developer: ${process.env.API_GMAIL}</p>
+                        <p> ${currentDate.toDateString()}</P>
+                        <p> ${currentDate.getTime()}</p>
+                        `
+                        }
+                        transporter.sendMail(mailOptions, (err, info)=>{
+                            if(err) throw err;
+                        });
+                }else{
+                    return cb(null, false)
+                }
             }
         })
     }
+    } catch (error) {
+        return cb(error)
+    }
 }));
+
+passport.use(
+    "google",
+    new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://127.0.0.1:4000/auth/google/secrets",
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+}, async(accessToken, refreshToken, profile, cb)=>{
+    console.log(profile);
+}))
 
 passport.serializeUser((user, cb)=>{
     return cb(null, user)
@@ -184,3 +208,23 @@ passport.deserializeUser((user, cb)=>{
 const PORT = process.env.PORT || 5500;
 
 app.listen(PORT, ()=> console.log(`http://127.0.0.1:${PORT}`));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// http://127.0.0.1:4000/auth/google/secrets
