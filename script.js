@@ -106,8 +106,8 @@ app.post("/login",passport.authenticate("local",{
 }));
 
 //Handling the root route of the website 
-app.get('/auth/google', passport.authenticate("goole",{
-    scope : [ "profile", "email"]
+app.get("/auth/google",passport.authenticate("google",{
+    scope: ["profile", "email"]
 }))
 app.get("/", (req, res)=>{
     res.render("index");
@@ -125,9 +125,13 @@ app.get("/secret",(req, res)=>{
     else{
         res.redirect('/login')
     }
-})
+});
+app.get("/auth/google/secrets", passport.authenticate("google",{
+    successRedirect: "secret",
+    failureRedirect: "/",
+}))
 
-passport.use( new LocalStrategy(async(username, password, cb)=>{
+passport.use("local", new LocalStrategy(async(username, password, cb)=>{
     // using try and catch method for any error 
 
     try {
