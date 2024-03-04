@@ -13,6 +13,7 @@ body{
     radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
     background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
     background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+    backdrop-filter: blur(1px);
     color: #eafbfb;
     display: grid;
     grid-auto-flow: column;
@@ -47,8 +48,11 @@ button{
 
 /* email page  */
 .login{
-    box-shadow: 0 0 .7em #eafbfb;
+    box-shadow: 0 0 .5em #eafbfb;
+    border-radius: 10px;
     padding: 2em 20px ;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+    backdrop-filter: blur(2px);
 }
 form{
     display: flex;
